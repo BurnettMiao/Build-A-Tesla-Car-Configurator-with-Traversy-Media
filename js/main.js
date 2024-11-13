@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const interiorImage = document.querySelector('#interior-image');
   const wheelButtonsSection = document.querySelector('#wheel-buttons');
 
+  let selectedColor = 'Stealth Grey';
+  const selectedOptions = {
+    'Performance Wheels': false,
+    'Performance Package': false,
+    'Full Self-Driving': false,
+  };
+
   // Handle Top Bar On Scrolls
   const handleScroll = () => {
     const atTop = window.scrollY === 0;
@@ -46,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Change exterior image
       if (event.currentTarget === exteriorColorSection) {
-        const color = button.querySelector('img').alt;
-        exteriorImage.src = exteriorImages[color];
+        selectedColor = button.querySelector('img').alt;
+        updateExteriorImage();
       }
 
       // Change interior image
@@ -56,6 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
         interiorImage.src = interiorImages[color];
       }
     }
+  };
+
+  // Update exterior image base on color and wheels
+  const updateExteriorImage = () => {
+    const performanceSuffix = selectedOptions['Performance Wheels']
+      ? '-performance'
+      : '';
+    const colorKey =
+      selectedColor in exteriorImages ? selectedColor : 'Stealth Grey';
+    exteriorImage.src = exteriorImages[colorKey].replace(
+      '.jpg',
+      `${performanceSuffix}.jpg`
+    );
   };
 
   // Wheel Selection
@@ -69,11 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add selected styles to clicked button
       event.target.classList.add('bg-gray-700', 'text-white');
 
-      const selectedWheel = event.target.textContent.includes('Performance');
+      selectedOptions['Performance Wheels'] =
+        event.target.textContent.includes('Performance');
 
-      exteriorImage.src = selectedWheel
-        ? './images/model-y-stealth-grey-performance.jpg'
-        : './images/model-y-stealth-grey.jpg';
+      updateExteriorImage();
     }
   };
 
