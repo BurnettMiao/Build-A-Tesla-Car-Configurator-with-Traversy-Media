@@ -12,6 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
     topBar.classList.toggle('hidden-bar', !atTop);
   };
 
+  // Image Mapping
+  const exteriorImages = {
+    'Stealth Grey': './images/model-y-stealth-grey.jpg',
+    'Pearl White': './images/model-y-pearl-white.jpg',
+    'Deep Blue': './images/model-y-deep-blue-metallic.jpg',
+    'Solid Black': './images/model-y-solid-black.jpg',
+    'Ultra Red': './images/model-y-ultra-red.jpg',
+    Quicksilver: './images/model-y-quicksilver.jpg',
+  };
+
+  const interiorImages = {
+    Dark: './images/model-y-interior-dark.jpg',
+    Light: './images/model-y-interior-light.jpg',
+  };
+
   // Handle Color Section
   const handleColorButtonClick = (event) => {
     let button;
@@ -27,6 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const buttons = event.currentTarget.querySelectorAll('button');
       buttons.forEach((btn) => btn.classList.remove('btn-selected'));
       button.classList.add('btn-selected');
+
+      // Change exterior image
+      if (event.currentTarget === exteriorColorSection) {
+        const color = button.querySelector('img').alt;
+        exteriorImage.src = exteriorImages[color];
+      }
+
+      // Change interior image
+      if (event.currentTarget === interiorColorSection) {
+        const color = button.querySelector('img').alt;
+        interiorImage.src = interiorImages[color];
+      }
     }
   };
 
