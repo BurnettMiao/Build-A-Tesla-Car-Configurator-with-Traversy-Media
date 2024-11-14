@@ -6,12 +6,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const interiorImage = document.querySelector('#interior-image');
   const wheelButtonsSection = document.querySelector('#wheel-buttons');
   const performanceBtn = document.querySelector('#performance-btn');
+  const totalPriceElement = document.querySelector('#total-price');
+
+  const basePrice = 52490;
+  let currentPrice = basePrice;
 
   let selectedColor = 'Stealth Grey';
   const selectedOptions = {
     'Performance Wheels': false,
     'Performance Package': false,
     'Full Self-Driving': false,
+  };
+
+  const pricing = {
+    'Performance Wheels': 2500,
+    'Performance Package': 5000,
+    'Full Self-Driving': 8500,
+    Accessories: {
+      'Center Console Trays': 35,
+      Sunshade: 105,
+      'All-Weather Interior Liners': 225,
+    },
+  };
+
+  // Update total price in the UI
+  const updateTotalPrice = () => {
+    // Reset the current price to base price
+    currentPrice = basePrice;
+
+    if (selectedOptions['Performance Wheels']) {
+      currentPrice += pricing['Performance Wheels'];
+    }
+
+    // Update the total price in UI
+    totalPriceElement.textContent = `$${currentPrice.toLocaleString()}`;
   };
 
   // Handle Top Bar On Scrolls
@@ -94,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.target.textContent.includes('Performance');
 
       updateExteriorImage();
+      updateTotalPrice();
     }
   };
 
