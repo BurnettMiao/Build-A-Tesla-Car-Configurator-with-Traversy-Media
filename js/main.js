@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
       currentPrice += pricing['Performance Wheels'];
     }
 
+    if (selectedOptions['Performance Package']) {
+      currentPrice += pricing['Performance Package'];
+    }
+
     // Update the total price in UI
     totalPriceElement.textContent = `$${currentPrice.toLocaleString()}`;
   };
@@ -128,8 +132,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Performance Package Selection
   const handlePerformanceButtonClick = () => {
-    performanceBtn.classList.toggle('bg-gray-700');
+    const isSelected = performanceBtn.classList.toggle('bg-gray-700');
     performanceBtn.classList.toggle('text-white');
+
+    // Update selected options
+    selectedOptions['Performance Package'] = isSelected;
+    updateTotalPrice();
   };
 
   // Event Listeners
