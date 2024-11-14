@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const accessoryCheckboxes = document.querySelectorAll(
     '.accessory-form-checkbox'
   );
+  const downPaymentElement = document.querySelector('#down-payment');
+  const monthlyPaymentElement = document.querySelector('#monthly-payment');
 
   const basePrice = 52490;
   let currentPrice = basePrice;
@@ -73,9 +75,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update the total price in UI
     totalPriceElement.textContent = `$${currentPrice.toLocaleString()}`;
+
+    updatePaymentBreakdown();
   };
 
-  // Handle Top Bar On Scrolls
+  // Update payment breakdown based on current price
+  const updatePaymentBreakdown = () => {
+    const downPayment = currentPrice * 0.1;
+    downPaymentElement.textContent = `$${downPayment.toLocaleString()}`;
+
+    // Calculate loan details (assuming 60-month loan and 3% interest rate)
+    const loanTermMonths = 60;
+    const interestRate = 0.03;
+
+    const loanAmount = currentPrice - downPayment;
+
+    // Monthly payment formula: P * (r(1+r)^n) / ((1+r)^n - 1)
+    const monthlyInterestRate = interestRate / 12;
+
+    const monthlyPayment =
+      (loanAmount *
+        (monthlyInterestRate *
+          Math.pow(1 + monthlyInterestRate, loanTermMonths))) /
+      (Math.pow(1 + monthlyInterestRate, loanTermMonths) - 1);
+
+    monthlyPaymentElement.textContent = `$${monthlyPayment
+      .toFixed(2)
+      .toLocaleString()}`;
+  };
+
+  // Handle Top Bar On Scroll
   const handleScroll = () => {
     const atTop = window.scrollY === 0;
     topBar.classList.toggle('visible-bar', atTop);
@@ -180,6 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
   accessoryCheckboxes.forEach((checkbox) => {
     checkbox.addEventListener('change', () => updateTotalPrice());
   });
+
+  // Initial Update Total Price
+  updateTotalPrice();
 
   // Event Listeners
   window.addEventListener('scroll', () => requestAnimationFrame(handleScroll));
